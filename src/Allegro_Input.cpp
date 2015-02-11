@@ -8,12 +8,16 @@
 Allegro_Input::Allegro_Input()
 {
     install_keyboard();
+    install_mouse();
+    install_timer();
+    firstMousePosition = false;
 }
 
 Allegro_Input::~Allegro_Input()
 {
     //dtor
     remove_keyboard();
+    remove_mouse();
 }
 
 Allegro_Input::Key Allegro_Input::getKey()
@@ -54,18 +58,38 @@ bool Allegro_Input::readKey()
 
 bool Allegro_Input::hasMousemoved()
 {
-    LastMousePosition = getMousePosition();
+    if(firstMousePosition == false)
+    {
+        firstMousePosition = true;
+        LastMousePosition = getMousePosition();
 
-    std::cout << "Die Maus hat ihre Position nicht verändert ..." << std::endl;
-    return false;
+        std::cout << "Die Maus hat ihre Position nicht verändert ..." << std::endl;
+        return false;
+    }
+
+    MousePosition MyMousePosition = getMousePosition();
+
+    if((MyMousePosition.mouse_x == LastMousePosition.mouse_x) && (MyMousePosition.mouse_y == LastMousePosition.mouse_y))
+    {
+        std::cout << "Die Maus hat ihre Position nicht verändert ..." << std::endl;
+        return false;
+    }
+    else
+    {
+        std::cout << "Die Maus hat ihre Position verändert ..." << std::endl;
+        return true;
+    }
+
 }
 
 Allegro_Input::MouseButtonStatus Allegro_Input::getMouseButton()
 {
+    Mouse_Poll();
+
     Allegro_Input::MouseButtonStatus Test;
 
-    Test.mouse_left = false;
-    Test.mouse_right = false;
+    Test.mouse_left = mouse_b & 1;
+    Test.mouse_right = mouse_b & 2;
 
     if(Test.mouse_left)
     {
@@ -90,13 +114,23 @@ Allegro_Input::MouseButtonStatus Allegro_Input::getMouseButton()
 
 Allegro_Input::MousePosition Allegro_Input::getMousePosition()
 {
+    Mouse_Poll();
+
     Allegro_Input::MousePosition Test;
 
-    Test.mouse_x = 0;
-    Test.mouse_y = 0;
+    Test.mouse_x = mouse_pos >> 16;
+    Test.mouse_y = mouse_pos & 0x0000ffff;
 
     std::cout << "Die Maus steht an Position X = " << Test.mouse_x << " und Position Y = " << Test.mouse_y << " ..." << std::endl;
 
     return Test;
+}
+
+void Allegro_Input::Mouse_Poll()
+{
+    if(mouse_needs_poll())
+    {
+        poll_mouse();
+    }
 }
 #endif // ALLEGRO_INPUT_CPP

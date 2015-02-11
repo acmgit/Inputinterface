@@ -20,7 +20,9 @@ class Allegro_Input: public Inputinterface
 
     protected:
     private:
+    void Mouse_Poll();
 
+    bool firstMousePosition;
     MousePosition LastMousePosition;
 };
 

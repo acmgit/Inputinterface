@@ -18,12 +18,14 @@ int main()
 
     Allegro_Input MyInput;
 
-    MyInput.readKey();
+    enable_hardware_cursor();
 
+    MyInput.readKey();
     Allegro_Input::Key MyKey;
     MyKey = MyInput.getKey();
 
     cout << endl;
+
 
     Allegro_Input::MouseButtonStatus ButtonTest;
     ButtonTest = MyInput.getMouseButton();
