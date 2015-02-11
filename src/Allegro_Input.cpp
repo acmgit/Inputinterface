@@ -11,6 +11,9 @@ Allegro_Input::Allegro_Input()
     install_mouse();
     install_timer();
     firstMousePosition = false;
+
+    enable_hardware_cursor();
+    show_os_cursor(MOUSE_CURSOR_ARROW);
 }
 
 Allegro_Input::~Allegro_Input()

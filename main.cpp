@@ -18,8 +18,6 @@ int main()
 
     Allegro_Input MyInput;
 
-    enable_hardware_cursor();
-
     MyInput.readKey();
     Allegro_Input::Key MyKey;
     MyKey = MyInput.getKey();
