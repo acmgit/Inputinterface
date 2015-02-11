@@ -61,6 +61,7 @@ bool Allegro_Input::readKey()
 
 bool Allegro_Input::hasMousemoved()
 {
+    needPoll();
     if(firstMousePosition == false)
     {
         firstMousePosition = true;
@@ -87,7 +88,7 @@ bool Allegro_Input::hasMousemoved()
 
 Allegro_Input::MouseButtonStatus Allegro_Input::getMouseButton()
 {
-    Mouse_Poll();
+    needPoll();
 
     Allegro_Input::MouseButtonStatus Test;
 
@@ -117,7 +118,7 @@ Allegro_Input::MouseButtonStatus Allegro_Input::getMouseButton()
 
 Allegro_Input::MousePosition Allegro_Input::getMousePosition()
 {
-    Mouse_Poll();
+    needPoll();
 
     Allegro_Input::MousePosition Test;
 
@@ -129,11 +130,16 @@ Allegro_Input::MousePosition Allegro_Input::getMousePosition()
     return Test;
 }
 
-void Allegro_Input::Mouse_Poll()
+void Allegro_Input::needPoll()
 {
     if(mouse_needs_poll())
     {
         poll_mouse();
+    }
+
+    if(keyboard_needs_poll())
+    {
+        poll_keyboard();
     }
 }
 #endif // ALLEGRO_INPUT_CPP

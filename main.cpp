@@ -12,7 +12,8 @@ int main()
 
     if (set_gfx_mode(GFX_AUTODETECT_WINDOWED, 640, 480, 0, 0) != 0)
     {
-        cout << "Couldn't set graphic mode!" << endl;
+        allegro_message("Couldn't set graphic mode!");
+        //cout << "Couldn't set graphic mode!" << endl;
         return false;
     }
 
