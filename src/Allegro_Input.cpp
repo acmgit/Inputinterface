@@ -43,17 +43,15 @@ Allegro_Input::Key Allegro_Input::getKey()
 
 bool Allegro_Input::readKey()
 {
-    int myKey;
-    myKey = keypressed();
 
-    if(myKey)
+    if(keypressed())
     {
         std::cout << "Es wurde eine Taste gedrückt ..." << std::endl;
         return true;
     }
     else
     {
-        std::cout << "Es wurde keine Taste gedrückt ..." << std::endl;
+        //std::cout << "Es wurde keine Taste gedrückt ..." << std::endl;
         return false;
     }
 

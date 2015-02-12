@@ -35,6 +35,13 @@ int main()
 
     cout << endl;
 
+    cout << "GetString .... " << endl << endl;
+
+    std::string MyString;
+    MyString = MyInput.inputString(4);
+
+    cout << "Eingegebener String: " << MyString << endl;
+
     return 0;
 }
 
