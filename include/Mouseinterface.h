@@ -15,6 +15,7 @@ class Mouseinterface
         {
             bool mouse_left;
             bool mouse_right;
+            bool mouse_middle;
         };
 
         virtual MousePosition getMousePosition() = 0;
