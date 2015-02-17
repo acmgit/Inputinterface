@@ -19,11 +19,13 @@ class Allegro_Input: public Inputinterface
     MouseButtonStatus getMouseButton();
 
     protected:
+
     private:
     void needPoll();
 
-    bool firstMousePosition;
-    MousePosition LastMousePosition;
-};
+    bool isMousePositionvalid;
+    MousePosition lastMousePosition;
+
+}; // class Allegro_Input
 
 #endif // ALLEGRO_INPUT_H

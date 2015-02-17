@@ -5,7 +5,6 @@
 class Keyboardinterface
 {
     public:
-
         // Public Struct to get Key's
         struct Key
         {
@@ -14,11 +13,11 @@ class Keyboardinterface
             bool Shift;
             bool Strg;
             bool Alt;
-        };
+        }; // Key
 
         virtual bool readKey() = 0;         // Is a Key pressed?
         virtual Key getKey() = 0;           // Ok, get the Key
 
-};
+}; // class Keyboardinterface
 
 #endif // KEYBOARDINTERFACE_H

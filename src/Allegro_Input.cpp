@@ -10,7 +10,7 @@ Allegro_Input::Allegro_Input()
     install_keyboard();
     install_mouse();
     install_timer();
-    firstMousePosition = false;
+    isMousePositionvalid = false;
 
     enable_hardware_cursor();
     show_os_cursor(MOUSE_CURSOR_ARROW);
@@ -27,20 +27,20 @@ Allegro_Input::~Allegro_Input()
 
 Allegro_Input::Key Allegro_Input::getKey()
 {
-    Allegro_Input::Key Test;
-    int myKey;
-    myKey = readkey();
+    int currentAllegroKey;
+    currentAllegroKey = readkey();                                                          // Attention, this is the readkey-Function from Allegro
 
-    Test.Key = (char) myKey;
-    Test.Scancode = myKey >> 8;
-    Test.Strg = false;
-    Test.Alt = false;
-    Test.Shift = false;
+    Allegro_Input::Key currentKey;
+    currentKey.Key = (char) currentAllegroKey;
+    currentKey.Scancode = currentAllegroKey >> 8;
+    currentKey.Strg = false;
+    currentKey.Alt = false;
+    currentKey.Shift = false;
 
-    std::cout << "Es steht die Taste " << Test.Key << " im Tastaturpuffer." << std::endl;
-    std::cout << "Mit dem Scancode " << Test.Scancode << "." << std::endl;
+    std::cout << "Es steht die Taste " << currentKey.Key << " im Tastaturpuffer." << std::endl;
+    std::cout << "Mit dem Scancode " << currentKey.Scancode << "." << std::endl;
 
-    return Test;
+    return currentKey;
 
 } // getKey
 
@@ -60,18 +60,18 @@ bool Allegro_Input::readKey()
 bool Allegro_Input::hasMousemoved()
 {
     needPoll();
-    if(firstMousePosition == false)                                                     // has firstMousePosition a value?
+    if(isMousePositionvalid == false)                                                       // has lastMousePosition a value?
     {
-        firstMousePosition = true;                                                      // no,
-        LastMousePosition = getMousePosition();                                         // write the Value to LastMousePosition
+        isMousePositionvalid = true;                                                        // no,
+        lastMousePosition = getMousePosition();                                             // write the Value to lastMousePosition
 
         std::cout << "Die Maus hat ihre Position nicht verändert ..." << std::endl;
-        return false;                                                                   // false, cause we don't know about an move of the mouse
+        return false;                                                                       // false, cause we don't know about an move of the mouse
 
-    } // if firstMousePosition
+    } // if isMousePositionvalid
 
-    MousePosition MyMousePosition = getMousePosition();
-    if((MyMousePosition.mouse_x == LastMousePosition.mouse_x) && (MyMousePosition.mouse_y == LastMousePosition.mouse_y))
+    MousePosition currentMousePosition = getMousePosition();
+    if((currentMousePosition.mouse_x == lastMousePosition.mouse_x) && (currentMousePosition.mouse_y == lastMousePosition.mouse_y))
     {
         std::cout << "Die Maus hat ihre Position nicht verändert ..." << std::endl;
         return false;
@@ -79,8 +79,8 @@ bool Allegro_Input::hasMousemoved()
     }
     else
     {
-        LastMousePosition.mouse_x = MyMousePosition.mouse_x;                           // Update the new Mouseposition
-        LastMousePosition.mouse_y = MyMousePosition.mouse_y;
+        lastMousePosition.mouse_x = currentMousePosition.mouse_x;                           // Update the new Mouseposition
+        lastMousePosition.mouse_y = currentMousePosition.mouse_y;
         std::cout << "Die Maus hat ihre Position verändert ..." << std::endl;
         return true;
 
@@ -92,12 +92,12 @@ Allegro_Input::MouseButtonStatus Allegro_Input::getMouseButton()
 {
     needPoll();
 
-    Allegro_Input::MouseButtonStatus Test;
+    Allegro_Input::MouseButtonStatus currentMouseButtonStatus;
 
-    Test.mouse_left = mouse_b & 1;
-    Test.mouse_right = mouse_b & 2;
+    currentMouseButtonStatus.mouse_left = mouse_b & 1;
+    currentMouseButtonStatus.mouse_right = mouse_b & 2;
 
-    if(Test.mouse_left)
+    if(currentMouseButtonStatus.mouse_left)
     {
         std::cout << "Die linke Maustaste ist gedrückt ..." << std::endl;
 
@@ -106,9 +106,9 @@ Allegro_Input::MouseButtonStatus Allegro_Input::getMouseButton()
     {
         std::cout << "Die linke Maustaste ist nicht gedrückt ..." << std::endl;
 
-    } // if Test.mouse_left
+    } // if currentMouseButtonStatus.mouse_left
 
-    if(Test.mouse_right)
+    if(currentMouseButtonStatus.mouse_right)
     {
         std::cout << "Die rechte Maustaste ist gedrückt ..." << std::endl;
 
@@ -117,9 +117,9 @@ Allegro_Input::MouseButtonStatus Allegro_Input::getMouseButton()
     {
         std::cout << "Die rechte Maustaste ist nicht gedrückt ..." << std::endl;
 
-    } // if Test.mouse_right
+    } // if currentMousePosition.mouse_right
 
-    return Test;
+    return currentMouseButtonStatus;
 
 } // getMouseButton
 
@@ -127,14 +127,14 @@ Allegro_Input::MousePosition Allegro_Input::getMousePosition()
 {
     needPoll();
 
-    Allegro_Input::MousePosition Test;
+    Allegro_Input::MousePosition currentMousePosition;
 
-    Test.mouse_x = mouse_pos >> 16;
-    Test.mouse_y = mouse_pos & 0x0000ffff;
+    currentMousePosition.mouse_x = mouse_pos >> 16;
+    currentMousePosition.mouse_y = mouse_pos & 0x0000ffff;
 
-    std::cout << "Die Maus steht an Position X = " << Test.mouse_x << " und Position Y = " << Test.mouse_y << " ..." << std::endl;
+    std::cout << "Die Maus steht an Position X = " << currentMousePosition.mouse_x << " und Position Y = " << currentMousePosition.mouse_y << " ..." << std::endl;
 
-    return Test;
+    return currentMousePosition;
 } // getMousePosition
 
 void Allegro_Input::needPoll()
@@ -142,12 +142,14 @@ void Allegro_Input::needPoll()
     if(mouse_needs_poll())
     {
         poll_mouse();
-    }
+
+    } // if mouse_needs_poll
 
     if(keyboard_needs_poll())
     {
         poll_keyboard();
-    }
+
+    } // if keyboard_needs_poll
 
 } // needPoll
 #endif // ALLEGRO_INPUT_CPP
