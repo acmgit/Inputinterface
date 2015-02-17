@@ -16,7 +16,7 @@ class Inputinterface: public Keyboardinterface, public Mouseinterface
 
     protected:
 
-    enum SpecialKey
+    enum
     {
         SCAN_ESCAPE = 59,
         SCAN_ENTER = 67,
